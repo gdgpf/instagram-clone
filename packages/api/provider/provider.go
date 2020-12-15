@@ -32,7 +32,8 @@ func auth(next http.Handler) http.Handler {
 func Routes() *mux.Router {
 	r := mux.NewRouter()
 
-	r.Handle("/:username/image/:typeImage", auth(http.HandlerFunc(image.Create))).Methods("POST", "OPTIONS")
+	r.Handle("/{username}/image/{type}", auth(http.HandlerFunc(image.Create))).Methods("POST", "OPTIONS")
+	r.Handle("/{username}/image/{type}/{file}", auth(http.HandlerFunc(image.Url))).Methods("GET", "OPTIONS")
 
 	return r
 }

@@ -12,7 +12,6 @@ import (
 )
 
 func Create(response http.ResponseWriter, request *http.Request) {
-
 	vars := mux.Vars(request)
 	username := vars["username"]
 	typeImage := vars["type"]
@@ -39,35 +38,5 @@ func Create(response http.ResponseWriter, request *http.Request) {
 		fmt.Println(err)
 	}
 
-	// sakeyFile := "key/storagekey.json"
-
-	// saKey, err := ioutil.ReadFile(sakeyFile)
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-
-	// cfg, err := google.JWTConfigFromJSON(saKey)
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-
-	// url, err := storage.SignedURL("firebase-auth", app+"/"+handle.Filename, &storage.SignedURLOptions{
-	// 	GoogleAccessID: cfg.Email,
-	// 	PrivateKey:     cfg.PrivateKey,
-	// 	Expires:        time.Now().Add(time.Second * 60),
-	// 	Method:         "GET",
-	// })
-
-	// if err != nil {
-	// 	fmt.Println("Error " + err.Error())
-	// }
-
-	// response.Header.Set()
-
-	// payload, _ := json.Marshal(Image{
-	// 	URL: url,
-	// })
-
-	// response.Write(payload)
 	return
 }
