@@ -13,7 +13,8 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
+	env := os.Getenv("GO_ENV")
+	err := godotenv.Load(".env." + env)
 	if err != nil {
 		log.Fatal("Não foi possível localizar o arquivo .env")
 	}

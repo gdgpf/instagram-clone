@@ -1,12 +1,18 @@
+CREATE TABLE image (
+    id serial PRIMARY KEY NOT NULL,
+    path varchar(200) NOT NULL,
+    type varchar(50) NOT NULL,
+    path_code varchar(100) NOT NULL
+);
+
 CREATE TABLE profile (
     id serial PRIMARY KEY NOT NULL,
     username varchar(20) NOT NULL UNIQUE,
-    description varchar(20)
-);
+    description varchar(20),
+    image_id INTEGER,
 
-CREATE TABLE image (
-    id serial PRIMARY KEY NOT NULL,
-    path varchar(200) NOT NULL
+    CONSTRAINT image_id_fk
+	FOREIGN KEY (image_id) REFERENCES image (id)
 );
 
 CREATE TABLE feed (

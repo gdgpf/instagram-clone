@@ -1,55 +1,90 @@
 package image
 
 import (
-	"encoding/json"
+	"api/factory"
+	"context"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"cloud.google.com/go/storage"
 	"github.com/gorilla/mux"
-	"golang.org/x/oauth2/google"
 )
 
 func Url(response http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
-	username := vars["username"]
-	typeImage := vars["type"]
-	fileName := vars["file"]
+	fileCode := vars["fileCode"]
 
-	key, err := ioutil.ReadFile(os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"))
-	if err != nil {
-		log.Fatalln(err)
-	}
+	var exists bool
+	var image *Image
+	var resp []byte
 
-	cfg, err := google.JWTConfigFromJSON(key)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	url, err := storage.SignedURL("instagram-clone-gdg", username+"/"+typeImage+"/"+fileName, &storage.SignedURLOptions{
-		GoogleAccessID: cfg.Email,
-		PrivateKey:     cfg.PrivateKey,
-		Expires:        time.Now().Add(time.Second * 60),
-		Method:         "GET",
-	})
-
-	if err != nil {
-		fmt.Println("Error " + err.Error())
-	}
-
-	payload, err := json.Marshal(Image{
-		URL: url,
-	})
-
-	if err != nil {
+	if exists, resp, image = index(fileCode); !exists {
 		response.WriteHeader(http.StatusNotFound)
-		response.Write([]byte("Nenhuma imagem encontrada!!"))
+		response.Write(resp)
 		return
 	}
 
-	response.Write(payload)
+	var fileName string
+
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
+	defer cancel()
+
+	bucket := client.Bucket("instagram-clone-gdg")
+
+	rc, err := bucket.Object(image.Path).NewReader(ctx)
+
+	defer client.Close()
+	slurp, _ := ioutil.ReadAll(rc)
+
+	// attachment, inline
+	response.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	response.Header().Set("Content-Type", http.DetectContentType(slurp))
+	response.Write(slurp)
+
+	return
+}
+
+func index(pathCode string) (bool, []byte, *Image) {
+	image := New()
+	db := factory.GetConnection()
+
+	{
+		rows, err := db.Query(`SELECT * FROM image where path_code = $1 LIMIT 1;`,
+			pathCode,
+		)
+		e, isEr := factory.CheckErr(err)
+
+		if isEr {
+			return false, e.ReturnError(), nil
+		}
+
+		for rows.Next() {
+			err = rows.Scan(
+				&image.ID,
+				&image.Path,
+				&image.Type,
+				&image.PathCode,
+			)
+			e, isEr := factory.CheckErr(err)
+
+			if isEr {
+				return false, e.ReturnError(), nil
+			}
+		}
+
+		if image.ID == 0 {
+			return false, factory.ReturnMessage("Nada encontrado"), &image
+		}
+
+		return true, nil, &image
+	}
 }
