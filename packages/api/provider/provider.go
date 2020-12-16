@@ -2,6 +2,7 @@ package provider
 
 import (
 	"api/controller/image"
+	"api/controller/profile"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -24,6 +25,8 @@ func Routes() *mux.Router {
 
 	r.Handle("/{username}/image/{type}", auth(http.HandlerFunc(image.Create))).Methods("POST", "OPTIONS")
 	r.Handle("/image/{fileCode}", auth(http.HandlerFunc(image.Url))).Methods("GET", "OPTIONS")
+
+	r.Handle("/profile", auth(http.HandlerFunc(profile.Create))).Methods("POST", "OPTIONS")
 
 	return r
 }
