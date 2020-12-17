@@ -23,7 +23,7 @@ func Create(response http.ResponseWriter, request *http.Request) {
 	defer file.Close()
 
 	extention := filepath.Ext(handle.Filename)
-	hash := handler.RandomString(30)
+	hash := handler.RandomString(90)
 
 	path := username + "/" + typeImage + "/" + string(hash) + extention
 

@@ -1,20 +1,53 @@
 package profile
 
 import (
+	"api/controller/image"
 	"api/factory"
 	"api/handler"
 	"bytes"
-	"fmt"
+	"encoding/json"
 	"io"
+	"math/rand"
 	"mime/multipart"
 	"net/http"
+	"strconv"
+)
+
+const (
+	MASCULINO = "men"
+	FEMININO  = "women"
 )
 
 func Create(response http.ResponseWriter, request *http.Request) {
-	{
-		res, _ := http.Get("https://randomuser.me/api/portraits/men/50.jpg")
+	profile := New()
+	image := image.New()
+	var profileRequest Profile
 
-		hash := handler.RandomString(30)
+	defer request.Body.Close()
+
+	{
+		if err := json.NewDecoder(request.Body).Decode(&profileRequest); err != nil {
+			response.WriteHeader(http.StatusInternalServerError)
+			response.Write([]byte("Algo errado com o json, revise!!"))
+			return
+		}
+	}
+
+	{
+		numero := rand.Intn(99)
+		numeroGenero := rand.Intn(1)
+		foto := strconv.Itoa(numero)
+		var res *http.Response
+
+		switch numeroGenero {
+		case 0:
+			res, _ = http.Get("https://randomuser.me/api/portraits/" + FEMININO + "/" + foto + ".jpg")
+			break
+		case 1:
+			res, _ = http.Get("https://randomuser.me/api/portraits/" + MASCULINO + "/" + foto + ".jpg")
+		}
+
+		hash := handler.RandomString(90)
 
 		body := &bytes.Buffer{}
 		writer := multipart.NewWriter(body)
@@ -22,44 +55,22 @@ func Create(response http.ResponseWriter, request *http.Request) {
 		io.Copy(part, res.Body)
 		writer.Close()
 
-		fmt.Println(request.Host)
-
 		r, _ := http.NewRequest("POST", "http://"+request.Host+"/booscaaa/image/profile", body)
 		r.Header.Add("Content-Type", writer.FormDataContentType())
 		client := &http.Client{}
-		client.Do(r)
+		resp, _ := client.Do(r)
+
+		if err := json.NewDecoder(resp.Body).Decode(&image); err != nil {
+			response.WriteHeader(http.StatusInternalServerError)
+			response.Write([]byte("Problemas com a criação da imagem!!"))
+			return
+		}
 	}
 
-	//
-	// {
-
-	// 	// make a sample HTTP GET request
-
-	// 	// check for response error
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-
-	// 	// close response body
-
-	// 	// data, _ := ioutil.ReadAll(res.Body)
-
-	// 	res1, _ := http.Post("http://localhost:8000/booscaaa/image/profile", "multpart/form-data", res.Body)
-
-	// 	fmt.Println(res1)
-
-	// 	res.Body.Close()
-
-	// 	// print all response headers
-	// 	fmt.Println(res.Header)
-
-	// 	// get `Content-Type` header
-	// 	contentType := res.Header.Get("Content-Type")
-	// 	fmt.Println("Content-Type", contentType)
-
-	// }
-
 	{
+		db := factory.GetConnection()
+		defer db.Close()
+
 		tx, err := db.Begin()
 		e, isEr := factory.CheckErr(err)
 
@@ -81,11 +92,11 @@ func Create(response http.ResponseWriter, request *http.Request) {
 				return
 			}
 
-			err = stmt.QueryRow(path, typeImage, hash).Scan(
-				&image.ID,
-				&image.Path,
-				&image.Type,
-				&image.PathCode,
+			err = stmt.QueryRow(profileRequest.Username, profileRequest.Description, image.ID).Scan(
+				&profile.ID,
+				&profile.Username,
+				&profile.Description,
+				&profile.ImageID,
 			)
 			e, isEr = factory.CheckErr(err)
 
@@ -99,4 +110,7 @@ func Create(response http.ResponseWriter, request *http.Request) {
 
 		tx.Commit()
 	}
+
+	payload, _ := json.Marshal(profile)
+	response.Write(payload)
 }

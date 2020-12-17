@@ -1,10 +1,11 @@
 package profile
 
 type Profile struct {
-	ID          int    `json:"id"`
-	Username    string `json:"username"`
-	Description string `json:"description"`
-	ImageID     int    `json:"imageID"`
+	ID          int    `json:"id,omitempty"`
+	Username    string `json:"username,omitempty"`
+	Description string `json:"description,omitempty"`
+	ImageID     int    `json:"imageID,omitempty"`
+	PathCode    string `json:"pathCode,omitempty"`
 }
 
 func New() Profile {
