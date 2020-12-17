@@ -29,6 +29,7 @@ func Routes() *mux.Router {
 
 	r.Handle("/profile", cors(http.HandlerFunc(profile.Create))).Methods("POST", "OPTIONS")
 	r.Handle("/profile", cors(http.HandlerFunc(profile.Index))).Methods("GET", "OPTIONS")
+	r.Handle("/profile/{username}", cors(http.HandlerFunc(profile.SingleIndex))).Methods("GET", "OPTIONS")
 
 	r.Handle("/feed", cors(http.HandlerFunc(feed.Create))).Methods("POST", "OPTIONS")
 	r.Handle("/feed", cors(http.HandlerFunc(feed.Index))).Methods("GET", "OPTIONS")
