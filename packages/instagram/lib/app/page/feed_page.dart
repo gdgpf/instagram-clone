@@ -5,7 +5,7 @@ import 'package:instagram/app/widget/add_story_widget.dart';
 import 'package:instagram/app/widget/feed_widget.dart';
 import 'package:instagram/app/widget/story_widget.dart';
 import 'package:instagram/controller/login/login_controller.dart';
-import 'package:instagram/controller/profile/profile_controller.dart';
+import 'package:instagram/controller/profile/feed_controller.dart';
 
 class FeedPage extends StatefulWidget {
   @override
@@ -13,12 +13,12 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  final profileController = ProfileController();
+  final feedController = FeedController();
 
   @override
   void initState() {
     super.initState();
-    profileController.initState();
+    feedController.initState();
   }
 
   @override
@@ -62,10 +62,10 @@ class _FeedPageState extends State<FeedPage> {
                       }
 
                       return StoreWidget(
-                        profile: profileController.profiles[index - 1],
+                        profile: feedController.profiles[index - 1],
                       );
                     },
-                    itemCount: profileController.profiles.length + 1,
+                    itemCount: feedController.profiles.length + 1,
                   );
                 })),
             Divider(),
@@ -74,9 +74,9 @@ class _FeedPageState extends State<FeedPage> {
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return FeedWidget(feed: profileController.feed[index]);
+                  return FeedWidget(feed: feedController.feed[index]);
                 },
-                itemCount: profileController.feed.length,
+                itemCount: feedController.feed.length,
               );
             })
           ],

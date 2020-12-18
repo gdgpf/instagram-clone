@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'profile_controller.dart';
+part of 'feed_controller.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,23 +8,23 @@ part of 'profile_controller.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$ProfileController on _ProfileControllerBase, Store {
+mixin _$FeedController on _FeedControllerBase, Store {
   Computed<List<Profile>> _$profilesComputed;
 
   @override
   List<Profile> get profiles =>
       (_$profilesComputed ??= Computed<List<Profile>>(() => super.profiles,
-              name: '_ProfileControllerBase.profiles'))
+              name: '_FeedControllerBase.profiles'))
           .value;
   Computed<List<Feed>> _$feedComputed;
 
   @override
   List<Feed> get feed =>
       (_$feedComputed ??= Computed<List<Feed>>(() => super.feed,
-              name: '_ProfileControllerBase.feed'))
+              name: '_FeedControllerBase.feed'))
           .value;
 
-  final _$_profilesAtom = Atom(name: '_ProfileControllerBase._profiles');
+  final _$_profilesAtom = Atom(name: '_FeedControllerBase._profiles');
 
   @override
   ObservableList<Profile> get _profiles {
@@ -39,7 +39,7 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
     });
   }
 
-  final _$_feedAtom = Atom(name: '_ProfileControllerBase._feed');
+  final _$_feedAtom = Atom(name: '_FeedControllerBase._feed');
 
   @override
   ObservableList<Feed> get _feed {
@@ -54,8 +54,7 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
     });
   }
 
-  final _$initStateAsyncAction =
-      AsyncAction('_ProfileControllerBase.initState');
+  final _$initStateAsyncAction = AsyncAction('_FeedControllerBase.initState');
 
   @override
   Future initState() {

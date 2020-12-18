@@ -3,11 +3,11 @@ import 'package:instagram/domain/model/profile.dart';
 import 'package:instagram/domain/usecase/feed_usecase.dart';
 import 'package:instagram/domain/usecase/profile_usecase.dart';
 import 'package:mobx/mobx.dart';
-part 'profile_controller.g.dart';
+part 'feed_controller.g.dart';
 
-class ProfileController = _ProfileControllerBase with _$ProfileController;
+class FeedController = _FeedControllerBase with _$FeedController;
 
-abstract class _ProfileControllerBase with Store {
+abstract class _FeedControllerBase with Store {
   @observable
   ObservableList<Profile> _profiles = new ObservableList.of([]);
 
