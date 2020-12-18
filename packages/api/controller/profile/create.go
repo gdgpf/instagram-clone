@@ -6,7 +6,6 @@ import (
 	"api/handler"
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"math/rand"
 	"mime/multipart"
@@ -29,7 +28,6 @@ func Create(response http.ResponseWriter, request *http.Request) {
 
 	{
 		numero := rand.Intn(99)
-		fmt.Println(numero)
 		foto := strconv.Itoa(numero)
 		var res *http.Response
 

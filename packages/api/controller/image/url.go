@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"cloud.google.com/go/storage"
@@ -38,7 +39,7 @@ func Url(response http.ResponseWriter, request *http.Request) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
 
-	bucket := client.Bucket("instagram-clone")
+	bucket := client.Bucket(os.Getenv("BUCKET_NAME"))
 
 	rc, err := bucket.Object(image.Path).NewReader(ctx)
 

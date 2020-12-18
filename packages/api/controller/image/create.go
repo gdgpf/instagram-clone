@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -46,7 +47,7 @@ func Create(response http.ResponseWriter, request *http.Request) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
 
-	bucket := client.Bucket("instagram-clone")
+	bucket := client.Bucket(os.Getenv("BUCKET_NAME"))
 	wc := bucket.Object(path).NewWriter(ctx)
 	if _, err = io.Copy(wc, file); err != nil {
 		image.delete()

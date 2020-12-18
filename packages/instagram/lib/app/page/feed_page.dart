@@ -4,8 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:instagram/app/widget/add_story_widget.dart';
 import 'package:instagram/app/widget/feed_widget.dart';
 import 'package:instagram/app/widget/story_widget.dart';
-import 'package:instagram/controller/login/login_controller.dart';
-import 'package:instagram/controller/profile/feed_controller.dart';
+import 'package:instagram/controller/feed/feed_controller.dart';
 
 class FeedPage extends StatefulWidget {
   @override
@@ -38,7 +37,9 @@ class _FeedPageState extends State<FeedPage> {
                       Icons.camera_alt,
                       color: Colors.grey,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      feedController.create();
+                    },
                   ),
                   IconButton(
                     icon: Icon(

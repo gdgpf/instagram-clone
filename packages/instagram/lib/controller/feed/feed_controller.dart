@@ -23,11 +23,24 @@ abstract class _FeedControllerBase with Store {
   @action
   initState() async {
     try {
-      final apiProfile = ProfileUseCase();
-      final apiFeed = FeedUseCase();
-      this._profiles = ObservableList.of(await apiProfile.index());
+      final profileUseCase = ProfileUseCase();
+      final feedUseCase = FeedUseCase();
+      this._profiles = ObservableList.of(await profileUseCase.index());
 
-      this._feed = ObservableList.of(await apiFeed.index());
-    } catch (e) {}
+      this._feed = ObservableList.of(await feedUseCase.index());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @action
+  create() async {
+    try {
+      final feedUseCase = FeedUseCase();
+      await feedUseCase.create();
+      this._feed = ObservableList.of(await feedUseCase.index());
+    } catch (e) {
+      print(e);
+    }
   }
 }

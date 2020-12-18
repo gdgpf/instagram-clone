@@ -17,7 +17,8 @@ func Index(response http.ResponseWriter, request *http.Request) {
 		rows, err := db.Query(`
 			SELECT f.id, f.description, f.creation_date, i.id, i.path_code, p.id, p.username FROM feed f
 			INNER JOIN image i on i.id = f.image_id
-			INNER JOIN profile p on p.id = f.profile_id;
+			INNER JOIN profile p on p.id = f.profile_id
+			ORDER BY f.creation_date DESC;
 		`)
 		e, isEr := factory.CheckErr(err)
 

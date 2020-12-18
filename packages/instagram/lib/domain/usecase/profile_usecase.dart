@@ -29,8 +29,6 @@ class ProfileUseCase implements ProfileInterface {
 
       Profile profile = await api.login(username);
 
-      print(profile);
-
       await local.delete();
       await local.create(profile);
       return profile;
