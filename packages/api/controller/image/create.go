@@ -22,10 +22,10 @@ func Create(response http.ResponseWriter, request *http.Request) {
 	file, handle, err := request.FormFile("file")
 	defer file.Close()
 
-	extention := filepath.Ext(handle.Filename)
-	hash := handler.RandomString(90)
+	extension := filepath.Ext(handle.Filename)
+	hash := handler.RandomString(20)
 
-	path := username + "/" + typeImage + "/" + string(hash) + extention
+	path := username + "/" + typeImage + "/" + string(hash) + extension
 
 	var created bool
 	var image *Image
@@ -46,7 +46,7 @@ func Create(response http.ResponseWriter, request *http.Request) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
 
-	bucket := client.Bucket("instagram-clone-gdg")
+	bucket := client.Bucket("instagram-clone")
 	wc := bucket.Object(path).NewWriter(ctx)
 	if _, err = io.Copy(wc, file); err != nil {
 		image.delete()
@@ -116,7 +116,7 @@ func (image Image) delete() {
 		}
 
 		{
-			stmt, err := tx.Prepare(` 	DELETE * FROM image WHERE id = $1; `)
+			stmt, err := tx.Prepare(` 	DELETE FROM image WHERE id = $1; `)
 
 			_, isEr := factory.CheckErr(err)
 

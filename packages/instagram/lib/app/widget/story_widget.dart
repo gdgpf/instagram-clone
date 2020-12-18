@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram/data/constants.dart';
 import 'package:instagram/domain/model/profile.dart';
 
 class StoreWidget extends StatelessWidget {
@@ -48,7 +49,7 @@ class StoreWidget extends StatelessWidget {
                       ),
                     ),
                     child: Image.network(
-                      "http://192.168.1.133:3000/image/${profile.pathCode}",
+                      "$url/image/${profile.pathCode}",
                       fit: BoxFit.cover,
                     ),
                   ))),

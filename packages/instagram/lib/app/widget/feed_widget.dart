@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:instagram/data/constants.dart';
 import 'package:instagram/domain/model/feed.dart';
 import 'package:instagram/domain/model/profile.dart';
 
@@ -30,7 +31,7 @@ class FeedWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Image.network(
-                        "http://192.168.1.133:3000/image/${feed.profile.pathCode}",
+                        "$url/image/${feed.profile.pathCode}",
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -56,7 +57,7 @@ class FeedWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Image.network(
-                "http://192.168.1.133:3000/image/${feed.image.pathCode}",
+                "$url/image/${feed.image.pathCode}",
                 fit: BoxFit.cover,
               ),
             ),

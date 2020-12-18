@@ -7,7 +7,6 @@ import (
 	"github.com/lib/pq"
 )
 
-//MyError .
 type MyError struct {
 	Code          pq.ErrorCode `json:"code"`
 	Error         string       `json:"error"`
@@ -15,12 +14,10 @@ type MyError struct {
 	InternalQuery error        `json:"internalQuery"`
 }
 
-//Message .
 type Message struct {
 	Message string `json:"message"`
 }
 
-//CheckErr .
 func CheckErr(err error) (MyError, bool) {
 	if pgerr, ok := err.(*pq.Error); ok {
 		e := MyError{
@@ -59,7 +56,6 @@ func CheckErr(err error) (MyError, bool) {
 	return e, false
 }
 
-//ReturnMessage .
 func ReturnMessage(message string) []byte {
 	payload, _ := json.Marshal(Message{
 		Message: message,
@@ -67,7 +63,6 @@ func ReturnMessage(message string) []byte {
 	return payload
 }
 
-//ReturnError .
 func (e MyError) ReturnError() []byte {
 	payload, _ := json.Marshal(e)
 	return payload

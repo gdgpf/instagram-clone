@@ -38,17 +38,17 @@ func Url(response http.ResponseWriter, request *http.Request) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
 	defer cancel()
 
-	bucket := client.Bucket("instagram-clone-gdg")
+	bucket := client.Bucket("instagram-clone")
 
 	rc, err := bucket.Object(image.Path).NewReader(ctx)
 
 	defer client.Close()
-	slurp, _ := ioutil.ReadAll(rc)
+	file, _ := ioutil.ReadAll(rc)
 
 	// attachment, inline
 	response.Header().Set("Content-Disposition", "attachment; filename="+fileName)
-	response.Header().Set("Content-Type", http.DetectContentType(slurp))
-	response.Write(slurp)
+	response.Header().Set("Content-Type", http.DetectContentType(file))
+	response.Write(file)
 
 	return
 }

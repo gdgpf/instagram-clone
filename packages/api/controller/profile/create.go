@@ -6,13 +6,13 @@ import (
 	"api/handler"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"math/rand"
 	"mime/multipart"
 	"net/http"
 	"strconv"
 )
-
 
 func Create(response http.ResponseWriter, request *http.Request) {
 	profile := New()
@@ -21,25 +21,21 @@ func Create(response http.ResponseWriter, request *http.Request) {
 
 	defer request.Body.Close()
 
-	{
-		if err := json.NewDecoder(request.Body).Decode(&profileRequest); err != nil {
-			response.WriteHeader(http.StatusInternalServerError)
-			response.Write([]byte("Algo errado com o json, revise!!"))
-			return
-		}
+	if err := json.NewDecoder(request.Body).Decode(&profileRequest); err != nil {
+		response.WriteHeader(http.StatusInternalServerError)
+		response.Write([]byte("Algo errado com o json, revise!!"))
+		return
 	}
 
 	{
 		numero := rand.Intn(99)
+		fmt.Println(numero)
 		foto := strconv.Itoa(numero)
 		var res *http.Response
 
-	
-		
-			res, _ = http.Get("https://randomuser.me/api/portraits/men/" + foto + ".jpg")
-		
+		res, _ = http.Get("https://randomuser.me/api/portraits/men/" + foto + ".jpg")
 
-		hash := handler.RandomString(90)
+		hash := handler.RandomString(20)
 
 		body := &bytes.Buffer{}
 		writer := multipart.NewWriter(body)
@@ -47,7 +43,7 @@ func Create(response http.ResponseWriter, request *http.Request) {
 		io.Copy(part, res.Body)
 		writer.Close()
 
-		r, _ := http.NewRequest("POST", "http://"+request.Host+"/booscaaa/image/profile", body)
+		r, _ := http.NewRequest("POST", "http://"+request.Host+"/"+profileRequest.Username+"/image/profile", body)
 		r.Header.Add("Content-Type", writer.FormDataContentType())
 		client := &http.Client{}
 		resp, _ := client.Do(r)
