@@ -1,6 +1,5 @@
 import 'package:instagram/device/repository/database.dart';
 import 'package:instagram/domain/model/profile.dart';
-import 'package:sqflite/sqflite.dart';
 
 class ProfileLocalRepository {
   final DatabaseHandler database = new DatabaseHandler();
