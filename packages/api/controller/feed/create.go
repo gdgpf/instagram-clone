@@ -34,7 +34,7 @@ func Create(response http.ResponseWriter, request *http.Request) {
 		}
 
 		{
-			stmt, err := tx.Prepare(`INSERT INTO feed (user_id, image_id, description) VALUES ($1, $2, $3) returning *;`)
+			stmt, err := tx.Prepare(`INSERT INTO feed (profile_id, image_id, description) VALUES ($1, $2, $3) returning *;`)
 
 			e, isEr := factory.CheckErr(err)
 

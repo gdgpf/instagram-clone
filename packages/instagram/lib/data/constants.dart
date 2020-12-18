@@ -1,1 +1,1 @@
-const url = "https://gdg-teste-298811.rj.r.appspot.com";
+const url = "http://192.168.1.133:3000";

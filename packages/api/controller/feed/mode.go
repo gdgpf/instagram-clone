@@ -11,6 +11,7 @@ type Feed struct {
 type Profile struct {
 	ID       int    `json:"id,omitempty"`
 	Username string `json:"username,omitempty"`
+	PathCode string `json:"pathCode,omitempty"`
 }
 
 type Image struct {

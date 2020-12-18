@@ -13,10 +13,6 @@ import (
 	"strconv"
 )
 
-const (
-	MASCULINO = "men"
-	FEMININO  = "women"
-)
 
 func Create(response http.ResponseWriter, request *http.Request) {
 	profile := New()
@@ -35,17 +31,13 @@ func Create(response http.ResponseWriter, request *http.Request) {
 
 	{
 		numero := rand.Intn(99)
-		numeroGenero := rand.Intn(1)
 		foto := strconv.Itoa(numero)
 		var res *http.Response
 
-		switch numeroGenero {
-		case 0:
-			res, _ = http.Get("https://randomuser.me/api/portraits/" + FEMININO + "/" + foto + ".jpg")
-			break
-		case 1:
-			res, _ = http.Get("https://randomuser.me/api/portraits/" + MASCULINO + "/" + foto + ".jpg")
-		}
+	
+		
+			res, _ = http.Get("https://randomuser.me/api/portraits/men/" + foto + ".jpg")
+		
 
 		hash := handler.RandomString(90)
 

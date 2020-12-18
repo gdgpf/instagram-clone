@@ -1,11 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:instagram/app/page/feed_page.dart';
 import 'package:instagram/data/repository/profile_repository.dart';
+import 'package:instagram/domain/usecase/profile_usecase.dart';
 import 'package:mobx/mobx.dart';
 part 'login_controller.g.dart';
 
-class ProfileController = _ProfileControllerBase with _$ProfileController;
+class LoginController = _LoginControllerBase with _$LoginController;
 
-abstract class _ProfileControllerBase with Store {
+abstract class _LoginControllerBase with Store {
   @observable
   bool _loading = false;
 
@@ -15,10 +18,34 @@ abstract class _ProfileControllerBase with Store {
   final username = TextEditingController();
 
   @action
-  create() async {
-    this._loading = true;
-    final api = ProfileRepository();
-    await api.create(username.text);
-    this._loading = false;
+  create(BuildContext context) async {
+    try {
+      this._loading = true;
+      final api = ProfileRepository();
+      await api.create(username.text);
+      this._loading = false;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FeedPage()),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @action
+  login(BuildContext context) async {
+    try {
+      this._loading = true;
+      final api = ProfileUseCase();
+      await api.login(username.text);
+      this._loading = false;
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => FeedPage()),
+          (Route<dynamic> route) => false);
+    } catch (e) {
+      print(e);
+    }
   }
 }
