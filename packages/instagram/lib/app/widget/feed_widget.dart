@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:instagram/data/constants.dart';
 import 'package:instagram/domain/model/feed.dart';
-import 'package:instagram/domain/model/profile.dart';
 
 class FeedWidget extends StatelessWidget {
   final Feed feed;

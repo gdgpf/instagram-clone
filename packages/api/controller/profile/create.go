@@ -6,6 +6,7 @@ import (
 	"api/handler"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"math/rand"
 	"mime/multipart"
@@ -30,8 +31,12 @@ func Create(response http.ResponseWriter, request *http.Request) {
 		numero := rand.Intn(99)
 		foto := strconv.Itoa(numero)
 		var res *http.Response
+		var e error
 
-		res, _ = http.Get("https://randomuser.me/api/portraits/men/" + foto + ".jpg")
+		res, e = http.Get("https://randomuser.me/api/portraits/men/" + foto + ".jpg")
+
+		fmt.Println("https://randomuser.me/api/portraits/men/" + foto + ".jpg")
+		fmt.Println(e)
 
 		hash := handler.RandomString(20)
 
